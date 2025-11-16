@@ -74,11 +74,6 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
     
-    // Check if user has access
-    if (!user.has_access) {
-      return res.status(403).json({ error: 'Account has no access' });
-    }
-    
     // Generate JWT token
     const token = jwt.sign(
       {
