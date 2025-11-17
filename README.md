@@ -1,4 +1,4 @@
-# mgmt API - User Management Backend
+# mngmt API - User Management Backend
 
 A production-ready RESTful API built with Node.js and Express, featuring JWT authentication, role-based access control, and secure user management.
 
@@ -90,4 +90,4 @@ requireAdmin   // Ensures user has admin privileges
 
 ## 🔗 Related Projects
 
-- [mgmt-ios](https://github.com/anakx/mgmt-ios) - iOS frontend application
+- [mngmt-ios](https://github.com/anakx/mngmt-ios) - iOS frontend application
