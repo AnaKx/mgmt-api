@@ -7,18 +7,21 @@ const router = express.Router();
 
 // Signup route
 router.post('/signup', async (req, res) => {
+  
   try {
     const { name, email, password, isAdmin } = req.body;
     
+  const normalizedEmail = email.toLowerCase().trim();
+
     // Validate input
-    if (!name || !email || !password) {
+    if (!name || !normalizedEmail || !password) {
       return res.status(400).json({ error: 'Name, email, and password are required' });
     }
     
     // Check if user already exists
     const existingUser = await pool.query(
       'SELECT id FROM users WHERE email = $1',
-      [email]
+      [normalizedEmail]
     );
     
     if (existingUser.rows.length > 0) {
@@ -31,7 +34,7 @@ router.post('/signup', async (req, res) => {
     // Insert new user
     const result = await pool.query(
       'INSERT INTO users (name, email, password, is_admin, has_access) VALUES ($1, $2, $3, $4, $5) RETURNING id, name, email, is_admin, has_access, joined_at',
-      [name, email, hashedPassword, isAdmin || false, true]
+      [name, normalizedEmail, hashedPassword, isAdmin || false, true]
     );
     
     res.status(201).json({
@@ -49,16 +52,18 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    const normalizedEmail = email.toLowerCase().trim();
     
     // Validate input
-    if (!email || !password) {
+    if (!normalizedEmail || !password) {
       return res.status(400).json({ error: 'Email and password are required' });
     }
     
     // Find user by email
     const result = await pool.query(
       'SELECT * FROM users WHERE email = $1',
-      [email]
+      [normalizedEmail]
     );
     
     if (result.rows.length === 0) {
